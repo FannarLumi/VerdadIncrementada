@@ -51,7 +51,7 @@
 			});
 
 			mesh = new THREE.Mesh(geometry, material);
-			mesh.position.set(0, 0, -0.5);
+			mesh.position.set(getRandomPosition(), getRandomPosition(), -0.5);
 			scene.add(mesh);
 
 			// Add the AR button to the body of the DOM
@@ -83,6 +83,11 @@
 				mesh.visible = false;
 				isMeshVisible = false;
 			}
+		}
+
+		function getRandomPosition() {
+			// Genera una posición aleatoria entre -2 y 2
+			return Math.random() * 4 - 2;
 		}
 
 	</script>
