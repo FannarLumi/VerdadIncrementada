@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-	<title>Prueba with WebXR</title>
+	<title>Basic Scene with WebXR</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 	<link type="text/css" rel="stylesheet" href="style.css">
@@ -17,6 +17,7 @@
 
 		let camera, scene, renderer;
 		let mesh;
+		let isMeshVisible = true;
 
 		init();
 		animate();
@@ -77,8 +78,11 @@
 		}
 
 		function onClick(event) {
-			// Si la figura es visible, se oculta; de lo contrario, se muestra
-			mesh.visible = !mesh.visible;
+			// Cambia la visibilidad de la figura solo si estaba visible
+			if (isMeshVisible) {
+				mesh.visible = false;
+				isMeshVisible = false;
+			}
 		}
 
 	</script>
