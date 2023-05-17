@@ -60,7 +60,6 @@
 			window.addEventListener('resize', onWindowResize, false);
 			renderer.domElement.addEventListener('click', onClick, false);
 			renderer.domElement.addEventListener('touchstart', onClick, false);
-            
 		}
 
 		function onWindowResize() {
@@ -79,8 +78,6 @@
 		}
 
 		function onClick(event) {
-            event.preventDefault();
-
 			const mouse = {
 				x: (event.clientX / window.innerWidth) * 2 - 1,
 				y: -(event.clientY / window.innerHeight) * 2 + 1
@@ -96,7 +93,7 @@
                     mesh.visible = false;
                     isMeshVisible = false;
                     // Redirecciona a un enlace
-                    window.location.href = 'https://www.youtube.com';
+                    window.location.href = 'https://www.youtube.com/';
                 }
             }
         }
