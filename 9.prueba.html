@@ -58,9 +58,9 @@
 			document.body.appendChild(ARButton.createButton(renderer));
 
 			window.addEventListener('resize', onWindowResize, false);
-			//renderer.domElement.addEventListener('click', onClick, false);
+			renderer.domElement.addEventListener('click', onClick, false);
 			renderer.domElement.addEventListener('touchstart', onClick, false);
-			renderer.domElement.addEventListener('mousedown', onClick, false);
+            
 		}
 
 		function onWindowResize() {
