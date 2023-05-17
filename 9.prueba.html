@@ -78,21 +78,32 @@
 		}
 
 		function onClick(event) {
-			// Cambia la visibilidad de la figura solo si estaba visible
-			if (isMeshVisible) {
-				mesh.visible = false;
-				isMeshVisible = false;
-                // Redirecciona a un enlace
-				//window.location.href = 'https://www.youtube.com/';
-			}
-		}
+			const mouse = {
+				x: (event.clientX / window.innerWidth) * 2 - 1,
+				y: -(event.clientY / window.innerHeight) * 2 + 1
+			};
 
-		function getRandomPosition() {
-			// Genera una posición aleatoria entre -2 y 2
-			return Math.random() * 4 - 2;
-		}
+			const raycaster = new THREE.Raycaster();
+            raycaster.setFromCamera(mouse, camera);
+            const intersects = raycaster.intersectObjects(scene.children, true);
 
-	</script>
+            if (intersects.length > 0 && intersects[0].object === mesh) {
+                // Cambia la visibilidad de la figura solo si estaba visible
+                if (isMeshVisible) {
+                    mesh.visible = false;
+                    isMeshVisible = false;
+                    // Redirecciona a un enlace
+                    window.location.href = 'https://www.youtube.com';
+                }
+            }
+        }
+
+        function getRandomPosition() {
+        // Genera una posición aleatoria entre -2 y 2
+        return Math.random() * 4 - 2;
+        }
+
+    </script>
 </body>
 
 </html>
