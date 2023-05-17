@@ -58,9 +58,8 @@
 			document.body.appendChild(ARButton.createButton(renderer));
 
 			window.addEventListener('resize', onWindowResize, false);
-			//renderer.domElement.addEventListener('click', onClick, false);
+			renderer.domElement.addEventListener('click', onClick, false);
 			renderer.domElement.addEventListener('touchstart', onClick, false);
-            renderer.domElement.addEventListener('mousedown', onClick, false);
 		}
 
 		function onWindowResize() {
@@ -94,7 +93,7 @@
                     mesh.visible = false;
                     isMeshVisible = false;
                     // Redirecciona a un enlace
-                    window.location.href = 'https://www.youtube.com/';
+                    window.location.href = 'https://projectmigu-af702.web.app/play';
                 }
             }
         }
