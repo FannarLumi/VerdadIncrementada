@@ -60,7 +60,7 @@
 			window.addEventListener('resize', onWindowResize, false);
 			renderer.domElement.addEventListener('click', onClick, false);
 			renderer.domElement.addEventListener('touchstart', onClick, false);
-			renderer.domElement.addEventListener('contextmenu', onClick, false);
+			renderer.domElement.addEventListener('select', onSelect);
 		}
 
 		function onWindowResize() {
@@ -78,7 +78,7 @@
 			renderer.render(scene, camera);
 		}
 
-		function onClick(event) {
+		function onSelect(event) {
 			const mouse = {
 				x: (event.clientX / window.innerWidth) * 2 - 1,
 				y: -(event.clientY / window.innerHeight) * 2 + 1
