@@ -60,6 +60,7 @@
 			window.addEventListener('resize', onWindowResize, false);
 			renderer.domElement.addEventListener('click', onClick, false);
 			renderer.domElement.addEventListener('touchstart', onClick, false);
+			renderer.domElement.addEventListener('contextmenu', onClick, false);
 		}
 
 		function onWindowResize() {
