@@ -59,6 +59,7 @@
 
 			window.addEventListener('resize', onWindowResize, false);
 			renderer.domElement.addEventListener('click', onClick, false);
+			renderer.domElement.addEventListener('touchstart', onClick, false);
 		}
 
 		function onWindowResize() {
@@ -77,39 +78,46 @@
 		}
 
 		function onClick(event) {
-			event.preventDefault();
+			const mouse = {
+				x: (event.clientX / window.innerWidth) * 2 - 1,
+				y: -(event.clientY / window.innerHeight) * 2 + 1
+			};
 
-			// Comprueba si el clic se hizo en la figura
 			const raycaster = new THREE.Raycaster();
-			const mouse = new THREE.Vector2();
-			mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-			mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-			raycaster.setFromCamera(mouse, camera);
+            raycaster.setFromCamera(mouse, camera);
+            const intersects = raycaster.intersectObjects(scene.children, true);
 
-			const intersects = raycaster.intersectObjects(scene.children, true);
-			if (intersects.length > 0 && intersects[0].object === mesh) {
-				// Cambia la visibilidad de la figura solo si estaba visible
-				if (isMeshVisible) {
-					mesh.visible = false;
-					isMeshVisible = false;
-					// Redirecciona a uno de los enlaces aleatoriamente
-					const links = [
-						'https://www.youtube.com/',
-						'https://www.twitch.tv/',
-						'https://www.amazon.com.mx/'
-					];
-					const randomIndex = Math.floor(Math.random() * links.length);
-					window.location.href = links[randomIndex];
-				}
-			}
+            if (intersects.length > 0 && intersects[0].object === mesh) {
+                // Cambia la visibilidad de la figura solo si estaba visible
+                if (isMeshVisible) {
+                    mesh.visible = false;
+                    isMeshVisible = false;
+                    // Redirecciona a un enlace
+					link_seleccionado = getRandomLink();
+					if(link_seleccionado == 1){
+						window.location.href = 'https://www.youtube.com/';
+					}
+                    else if(link_seleccionado == 2){
+						window.location.href =  'https://www.amazon.com.mx/';
+					}
+					else{
+						window.location.href =  'https://www.twitch.tv/';
+					}
+                }
+            }
+        }
+
+        function getRandomPosition() {
+        // Genera una posición aleatoria entre -2 y 2
+        return Math.random() * 4 - 2;
+        }
+
+		function getRandomLink(){
+		// Genera un link random de 3 posibles
+		return Math.floor(Math.random() * 3) + 1; 
 		}
 
-		function getRandomPosition() {
-			// Genera una posición aleatoria entre -2 y 2
-			return Math.random() * 4 - 2;
-		}
-
-	</script>
+    </script>
 </body>
 
 </html>
