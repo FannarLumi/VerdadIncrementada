@@ -79,18 +79,28 @@
 		function onClick(event) {
 			event.preventDefault();
 
-			// Cambia la visibilidad de la figura solo si estaba visible
-			if (isMeshVisible && event.target === renderer.domElement) {
-				mesh.visible = false;
-				isMeshVisible = false;
-				// Redirecciona a uno de los enlaces aleatoriamente
-				const links = [
-					'https://www.youtube.com/',
-					'https://www.twitch.tv/',
-					'https://www.amazon.com.mx/'
-				];
-				const randomIndex = Math.floor(Math.random() * links.length);
-				window.location.href = links[randomIndex];
+			// Comprueba si el clic se hizo en la figura
+			const raycaster = new THREE.Raycaster();
+			const mouse = new THREE.Vector2();
+			mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+			mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+			raycaster.setFromCamera(mouse, camera);
+
+			const intersects = raycaster.intersectObjects(scene.children, true);
+			if (intersects.length > 0 && intersects[0].object === mesh) {
+				// Cambia la visibilidad de la figura solo si estaba visible
+				if (isMeshVisible) {
+					mesh.visible = false;
+					isMeshVisible = false;
+					// Redirecciona a uno de los enlaces aleatoriamente
+					const links = [
+						'https://www.youtube.com/',
+						'https://www.twitch.tv/',
+						'https://www.amazon.com.mx/'
+					];
+					const randomIndex = Math.floor(Math.random() * links.length);
+					window.location.href = links[randomIndex];
+				}
 			}
 		}
 
