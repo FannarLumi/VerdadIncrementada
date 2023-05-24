@@ -59,7 +59,6 @@
 
 			window.addEventListener('resize', onWindowResize, false);
 			renderer.domElement.addEventListener('click', onClick, false);
-			renderer.domElement.addEventListener('touchstart', onClick, false);
 		}
 
 		function onWindowResize() {
@@ -78,32 +77,29 @@
 		}
 
 		function onClick(event) {
-			const mouse = {
-				x: (event.clientX / window.innerWidth) * 2 - 1,
-				y: -(event.clientY / window.innerHeight) * 2 + 1
-			};
+			event.preventDefault();
 
-			const raycaster = new THREE.Raycaster();
-            raycaster.setFromCamera(mouse, camera);
-            const intersects = raycaster.intersectObjects(scene.children, true);
+			// Cambia la visibilidad de la figura solo si estaba visible
+			if (isMeshVisible && event.target === renderer.domElement) {
+				mesh.visible = false;
+				isMeshVisible = false;
+				// Redirecciona a uno de los enlaces aleatoriamente
+				const links = [
+					'https://www.youtube.com/',
+					'https://www.twitch.tv/',
+					'https://www.amazon.com.mx/'
+				];
+				const randomIndex = Math.floor(Math.random() * links.length);
+				window.location.href = links[randomIndex];
+			}
+		}
 
-            if (intersects.length > 0 && intersects[0].object === mesh) {
-                // Cambia la visibilidad de la figura solo si estaba visible
-                if (isMeshVisible) {
-                    mesh.visible = false;
-                    isMeshVisible = false;
-                    // Redirecciona a un enlace
-                    window.location.href = 'https://projectmigu-af702.web.app/memory';
-                }
-            }
-        }
+		function getRandomPosition() {
+			// Genera una posición aleatoria entre -2 y 2
+			return Math.random() * 4 - 2;
+		}
 
-        function getRandomPosition() {
-        // Genera una posición aleatoria entre -2 y 2
-        return Math.random() * 4 - 2;
-        }
-
-    </script>
+	</script>
 </body>
 
 </html>
