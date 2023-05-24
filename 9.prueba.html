@@ -93,11 +93,11 @@
                     mesh.visible = false;
                     isMeshVisible = false;
                     // Redirecciona a un enlace
-					link_seleccionado = getRandomLink();
-					if(link_seleccionado == 1){
+					getRandomLink();
+					if(id="resultado" == 1){
 						window.location.href = 'https://www.youtube.com/';
 					}
-                    else if(link_seleccionado == 2){
+                    else if(id="resultado" == 2){
 						window.location.href =  'https://www.amazon.com.mx/';
 					}
 					else{
@@ -112,10 +112,10 @@
         return Math.random() * 4 - 2;
         }
 
-		function getRandomLink(){
-		// Genera un link random de 3 posibles
-		return Math.floor(Math.random() * 3) + 1; 
-		}
+		function getRandomLink() {
+      		var numero = Math.floor(Math.random() * 3) + 1;
+      		document.getElementById("resultado").innerHTML = numero;
+    	}
 
     </script>
 </body>
