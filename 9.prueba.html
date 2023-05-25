@@ -59,7 +59,6 @@
 
 			window.addEventListener('resize', onWindowResize, false);
 			renderer.domElement.addEventListener('click', onClick, false);
-			renderer.domElement.addEventListener('touchstart', onClick, false);
 		}
 
 		function onWindowResize() {
@@ -78,46 +77,54 @@
 		}
 
 		function onClick(event) {
-			const mouse = {
-				x: (event.clientX / window.innerWidth) * 2 - 1,
-				y: -(event.clientY / window.innerHeight) * 2 + 1
-			};
+			event.preventDefault();
+
+			// Comprueba si el clic se hizo en la figura
+			const boundingRect = renderer.domElement.getBoundingClientRect();
+			const mouseX = event.clientX - boundingRect.left;
+			const mouseY = event.clientY - boundingRect.top;
+
+			const intersected = checkIntersection(mouseX, mouseY);
+			if (intersected && intersected.object === mesh) {
+				// Cambia la visibilidad de la figura solo si estaba visible
+				if (isMeshVisible) {
+					mesh.visible = false;
+					isMeshVisible = false;
+					// Redirecciona a uno de los enlaces aleatoriamente
+					const links = [
+						'https://www.ejemplo1.com',
+						'https://www.ejemplo2.com',
+						'https://www.ejemplo3.com'
+					];
+					const randomIndex = Math.floor(Math.random() * links.length);
+					window.location.href = links[randomIndex];
+				}
+			}
+		}
+
+		function checkIntersection(x, y) {
+			const mouse = new THREE.Vector2();
+			mouse.x = (x / window.innerWidth) * 2 - 1;
+			mouse.y = -(y / window.innerHeight) * 2 + 1;
 
 			const raycaster = new THREE.Raycaster();
-            raycaster.setFromCamera(mouse, camera);
-            const intersects = raycaster.intersectObjects(scene.children, true);
+			raycaster.setFromCamera(mouse, camera);
 
-            if (intersects.length > 0 && intersects[0].object === mesh) {
-                // Cambia la visibilidad de la figura solo si estaba visible
-                if (isMeshVisible) {
-                    mesh.visible = false;
-                    isMeshVisible = false;
-                    // Redirecciona a un enlace
-					getRandomLink();
-					if(id="resultado" == 1){
-						window.location.href = 'https://www.youtube.com/';
-					}
-                    else if(id="resultado" == 2){
-						window.location.href =  'https://www.amazon.com.mx/';
-					}
-					else{
-						window.location.href =  'https://www.twitch.tv/';
-					}
-                }
-            }
-        }
+			const intersects = raycaster.intersectObjects(scene.children, true);
 
-        function getRandomPosition() {
-        // Genera una posición aleatoria entre -2 y 2
-        return Math.random() * 4 - 2;
-        }
+			if (intersects.length > 0) {
+				return intersects[0];
+			}
 
-		function getRandomLink() {
-      		var numero = Math.floor(Math.random() * 3) + 1;
-      		document.getElementById("resultado").innerHTML = numero;
-    	}
+			return null;
+		}
 
-    </script>
+		function getRandomPosition() {
+			// Genera una posición aleatoria entre -2 y 2
+			return Math.random() * 4 - 2;
+		}
+
+	</script>
 </body>
 
 </html>
