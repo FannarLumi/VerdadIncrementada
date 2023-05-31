@@ -18,7 +18,7 @@
 
 		let camera, scene, renderer;
 		let mesh;
-		let isMeshVisible = true;
+		let clock;
 
 		init();
 		animate();
@@ -59,7 +59,8 @@
 			document.body.appendChild(ARButton.createButton(renderer));
 
 			window.addEventListener('resize', onWindowResize, false);
-			renderer.domElement.addEventListener('click', onClick, false);
+
+			clock = new THREE.Clock();
 		}
 
 		function onWindowResize() {
@@ -72,46 +73,17 @@
 		function animate() {
 			renderer.setAnimationLoop(render);
 
-			// Agrega rotación a la malla en cada cuadro de animación
+			// Obtiene el tiempo transcurrido desde el último cuadro
+			const delta = clock.getDelta();
+
+			// Agrega rotación a la malla basada en el tiempo transcurrido
 			if (mesh) {
-				mesh.rotation.y += 0.01; // Ajusta la velocidad de rotación según tus necesidades
+				mesh.rotation.y += 0.5 * delta; // Ajusta la velocidad de rotación según tus necesidades
 			}
 		}
 
 		function render() {
 			renderer.render(scene, camera);
-		}
-
-		function onClick(event) {
-			event.preventDefault();
-
-			// Comprueba si el clic se hizo en la figura
-			const boundingRect = renderer.domElement.getBoundingClientRect();
-			const mouseX = event.clientX - boundingRect.left;
-			const mouseY = event.clientY - boundingRect.top;
-
-			const intersected = checkIntersection(mouseX, mouseY);
-			if (intersected && intersected.object === mesh) {
-				// Redirecciona a un enlace específico
-				window.location.href = 'https://www.youtube.com'; // Reemplaza con tu enlace deseado
-			}
-		}
-
-		function checkIntersection(x, y) {
-			const mouse = new THREE.Vector2();
-			mouse.x = (x / window.innerWidth) * 2 - 1;
-			mouse.y = -(y / window.innerHeight) * 2 + 1;
-
-			const raycaster = new THREE.Raycaster();
-			raycaster.setFromCamera(mouse, camera);
-
-			const intersects = raycaster.intersectObjects(scene.children, true);
-
-			if (intersects.length > 0) {
-				return intersects[0];
-			}
-
-			return null;
 		}
 
 	</script>
