@@ -51,8 +51,6 @@
 				model.rotation.set(0, Math.PI / 2, 0);
 				model.position.set(0, 0, -0.5);
 				scene.add(model);
-
-				mesh = model; // Asigna la malla del modelo a la variable mesh
 			});
 
 			// Add the AR button to the body of the DOM
@@ -71,11 +69,6 @@
 
 		function animate() {
 			renderer.setAnimationLoop(render);
-
-			// Agrega rotación a la malla en cada cuadro de animación
-			if (mesh) {
-				mesh.rotation.y += 0.01; // Ajusta la velocidad de rotación según tus necesidades
-			}
 		}
 
 		function render() {
@@ -92,8 +85,14 @@
 
 			const intersected = checkIntersection(mouseX, mouseY);
 			if (intersected && intersected.object === mesh) {
-				// Redirecciona a un enlace específico
-				window.location.href = 'https://www.ejemplo.com'; // Reemplaza con tu enlace deseado
+				// Cambia la visibilidad de la figura solo si estaba visible
+				if (isMeshVisible) {
+					mesh.visible = false;
+					isMeshVisible = false;
+				} else {
+					mesh.visible = true;
+					isMeshVisible = true;
+				}
 			}
 		}
 
