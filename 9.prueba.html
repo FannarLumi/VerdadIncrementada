@@ -7,6 +7,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 	<link type="text/css" rel="stylesheet" href="style.css">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r126/three.js" crossorigin="anonymous"></script>
+	<script src="https://cdn.rawgit.com/mrdoob/three.js/master/examples/js/loaders/GLTFLoader.js"></script>
 </head>
 
 <body>
@@ -41,18 +42,16 @@
 			light.position.set(0.5, 1, 0.25);
 			scene.add(light);
 
-			const geometry = new THREE.IcosahedronGeometry(0.1, 1);
-			const material = new THREE.MeshPhongMaterial({
-				color: new THREE.Color("rgb(226,35,213)"),
-				shininess: 6,
-				flatShading: true,
-				transparent: 1,
-				opacity: 0.8
-			});
+			const loader = new THREE.GLTFLoader();
 
-			mesh = new THREE.Mesh(geometry, material);
-			mesh.position.set(getRandomPosition(), getRandomPosition(), -0.5);
-			scene.add(mesh);
+			loader.load('path/to/your/model.glb', function(gltf) {
+				const model = gltf.scene;
+				// Ajusta la escala, rotación y posición según tus necesidades
+				model.scale.set(0.1, 0.1, 0.1);
+				model.rotation.set(0, Math.PI / 2, 0);
+				model.position.set(0, 0, -0.5);
+				scene.add(model);
+			});
 
 			// Add the AR button to the body of the DOM
 			document.body.appendChild(ARButton.createButton(renderer));
@@ -90,14 +89,9 @@
 				if (isMeshVisible) {
 					mesh.visible = false;
 					isMeshVisible = false;
-					// Redirecciona a uno de los enlaces aleatoriamente
-					const links = [
-						'https://www.youtube.com/',
-						'https://www.amazon.com.mx/',
-						'https://www.twitch.tv/'
-					];
-					const randomIndex = Math.floor(Math.random() * links.length);
-					window.location.href = links[randomIndex];
+				} else {
+					mesh.visible = true;
+					isMeshVisible = true;
 				}
 			}
 		}
@@ -117,11 +111,6 @@
 			}
 
 			return null;
-		}
-
-		function getRandomPosition() {
-			// Genera una posición aleatoria entre -2 y 2
-			return Math.random() * 4 - 2;
 		}
 
 	</script>
