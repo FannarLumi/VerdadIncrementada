@@ -64,13 +64,6 @@
 			renderer.setSize(window.innerWidth, window.innerHeight);
 		}
 
-		function animate() {
-			renderer.setAnimationLoop(render);
-
-			if (isMeshVisible) {
-				mesh.rotation.y += 40;
-			}
-		}
 
 		function render() {
 			renderer.render(scene, camera);
@@ -88,7 +81,7 @@
 			if (intersected && intersected.object === model) {
 				// Cambia la visibilidad de la figura solo si estaba visible
 				if (isMeshVisible) {
-					mesh.visible = false;
+					model.visible = false;
 					isMeshVisible = false;
 					// Redirecciona a uno de los enlaces aleatoriamente
 					const links = [
