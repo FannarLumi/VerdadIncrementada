@@ -18,6 +18,8 @@
 		let mesh;
 		let isMeshVisible = true;
 
+		var x, y, z;
+
 		init();
 		animate();
 
@@ -26,6 +28,10 @@
 			document.body.appendChild(container);
 
 			scene = new THREE.Scene();
+
+			getRandomX();
+			getRandomY();
+			getRandomZ();
 
 			camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 40);
 
@@ -40,16 +46,34 @@
 			scene.add(light);
 
 			const loader = new THREE.GLTFLoader();
-
+			//Esto hace que el aMigü se genere
 			loader.load('./aMigus/mauricio.glb', function(gltf) {
 				const model = gltf.scene;
 				model.scale.set(0.1, 0.1, 0.1);
 				model.rotation.set(0, Math.PI / 2, 0);
-				placeModelRandomly(model);
+				// Coloca el modelo en una posición aleatoria
+				model.position.x = x;
+				model.position.y = y;
+				model.position.z = z;
 				scene.add(model);
 
 				mesh = model;
 			});
+			
+			/*
+			const geometry = new THREE.IcosahedronGeometry(0.1, 1);
+			const material = new THREE.MeshPhongMaterial({
+				color: new THREE.Color("rgb(226,35,213)"),
+				shininess: 6,
+				flatShading: true,
+				transparent: 1,
+				opacity: 0.00001
+			});
+
+			mesh = new THREE.Mesh(geometry, material);
+			mesh.position.set(x, y, z);
+			scene.add(mesh);
+			*/
 
 			document.body.appendChild(ARButton.createButton(renderer));
 
@@ -67,7 +91,7 @@
 		function animate() {
 			renderer.setAnimationLoop(render);
 
-			if (mesh) {
+			if (isMeshVisible) {
 				mesh.rotation.y += 0.01;
 			}
 		}
@@ -79,14 +103,26 @@
 		function onClick(event) {
 			event.preventDefault();
 
+			// Comprueba si el clic se hizo en la figura
 			const boundingRect = renderer.domElement.getBoundingClientRect();
 			const mouseX = event.clientX - boundingRect.left;
 			const mouseY = event.clientY - boundingRect.top;
 
 			const intersected = checkIntersection(mouseX, mouseY);
 			if (intersected && intersected.object === mesh) {
-				// Desaparece la figura al hacer tap
-				scene.remove(mesh);
+				// Cambia la visibilidad de la figura solo si estaba visible
+				if (isMeshVisible) {
+					mesh.visible = false;
+					isMeshVisible = false;
+					// Redirecciona a uno de los enlaces aleatoriamente
+					const links = [
+						'https://www.youtube.com/',
+						'https://www.amazon.com.mx/',
+						'https://www.twitch.tv/'
+					];
+					const randomIndex = Math.floor(Math.random() * links.length);
+					window.location.href = links[randomIndex];
+				}
 			}
 		}
 
@@ -107,12 +143,33 @@
 			return null;
 		}
 
-		function placeModelRandomly(model) {
-			const range = 3;
-			model.position.x = Math.random() * range - range / 2;
-			model.position.y = Math.random() * range - range / 2;
-			model.position.z = Math.random() * range - range / 2;
+		function getRandomX() {
+			var x = Math.random() * range - range / 2;
+			return x;
 		}
+
+		function getRandomY() {
+			var y = Math.random() * range - range / 2;
+			return y;
+		}
+
+		function getRandomZ() {
+			var z = Math.random() * range - range / 2;
+			return z;
+		}
+
+		/*
+		function placeModelRandomly(model) {
+			const range = 3; // Rango de posición en el que se generará aleatoriamente el modelo
+			var x = Math.random() * range - range / 2;
+			var y = Math.random() * range - range / 2;
+			var z = Math.random() * range - range / 2;
+			model.position.x = x;
+			model.position.y = y;
+			model.position.z = z;
+		}
+		*/
+
 
 	</script>
 </body>
