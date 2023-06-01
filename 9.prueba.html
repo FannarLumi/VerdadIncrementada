@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-	<title>Basic Scene with WebXR</title>
+	<title>Random Position in WebXR</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 	<link type="text/css" rel="stylesheet" href="style.css">
@@ -12,8 +12,6 @@
 
 <body>
 	<script type="module">
-		// To start an AR scene with webXR, we can use a handy button provided by three.js
-		// We first have to import it because it is a javascript module
 		import { ARButton } from 'https://unpkg.com/three@0.126.0/examples/jsm/webxr/ARButton.js';
 
 		let camera, scene, renderer;
@@ -34,8 +32,7 @@
 			renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 			renderer.setPixelRatio(window.devicePixelRatio);
 			renderer.setSize(window.innerWidth, window.innerHeight);
-			// This next line is important to enable the renderer for WebXR
-			renderer.xr.enabled = true; // New!
+			renderer.xr.enabled = true;
 			container.appendChild(renderer.domElement);
 
 			var light = new THREE.HemisphereLight(0xffffff, 0xbbbbff, 1);
@@ -44,18 +41,16 @@
 
 			const loader = new THREE.GLTFLoader();
 
-			loader.load('./aMigus/mauricio.glb', function(gltf) {
+			loader.load('mauricio.glb', function(gltf) {
 				const model = gltf.scene;
-				// Ajusta la escala, rotación y posición según tus necesidades
 				model.scale.set(0.1, 0.1, 0.1);
 				model.rotation.set(0, Math.PI / 2, 0);
-				model.position.set(0, 0, -0.5);
+				placeModelRandomly(model); // Coloca el modelo en una posición aleatoria
 				scene.add(model);
 
-				mesh = model; // Asigna la malla del modelo a la variable mesh
+				mesh = model;
 			});
 
-			// Add the AR button to the body of the DOM
 			document.body.appendChild(ARButton.createButton(renderer));
 
 			window.addEventListener('resize', onWindowResize, false);
@@ -72,9 +67,8 @@
 		function animate() {
 			renderer.setAnimationLoop(render);
 
-			// Agrega rotación a la malla en cada cuadro de animación
 			if (mesh) {
-				mesh.rotation.y += 0.01; // Ajusta la velocidad de rotación según tus necesidades
+				mesh.rotation.y += 0.01;
 			}
 		}
 
@@ -85,15 +79,13 @@
 		function onClick(event) {
 			event.preventDefault();
 
-			// Comprueba si el clic se hizo en la figura
 			const boundingRect = renderer.domElement.getBoundingClientRect();
 			const mouseX = event.clientX - boundingRect.left;
 			const mouseY = event.clientY - boundingRect.top;
 
 			const intersected = checkIntersection(mouseX, mouseY);
 			if (intersected && intersected.object === mesh) {
-				// Redirecciona a un enlace específico
-				window.location.href = 'https://www.youtube.com'; // Reemplaza con tu enlace deseado
+				window.location.href = 'https://www.youtube.com';
 			}
 		}
 
@@ -114,7 +106,15 @@
 			return null;
 		}
 
+		function placeModelRandomly(model) {
+			const range = 3; // Rango de posición en el que se generará aleatoriamente el modelo
+			model.position.x = Math.random() * range - range / 2;
+			model.position.y = Math.random() * range - range / 2;
+			model.position.z = Math.random() * range - range / 2;
+		}
+
 	</script>
 </body>
 
 </html>
+
