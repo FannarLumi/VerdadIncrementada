@@ -41,8 +41,7 @@
 			scene.add(light);
 
 			const loader = new THREE.GLTFLoader();
-			
-			//Carga el modelo de Mauricio
+
 			loader.load('./aMigus/mauricio.glb', function(gltf) {
 				const model = gltf.scene;
 				model.scale.set(0.1, 0.1, 0.1);
@@ -56,6 +55,8 @@
 				model.position.y = posY;
 				posZ = Math.random() * range - range / 2;
 				model.position.z = posZ;
+
+				mesh = model;
 			});
 
 			document.body.appendChild(ARButton.createButton(renderer));
