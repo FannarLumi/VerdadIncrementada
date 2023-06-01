@@ -121,9 +121,12 @@
 
 		function placeModelRandomly(model) {
 			const range = 3; // Rango de posición en el que se generará aleatoriamente el modelo
-			model.position.x = Math.random() * range - range / 2;
-			model.position.y = Math.random() * range - range / 2;
-			model.position.z = Math.random() * range - range / 2;
+			var x = Math.random() * range - range / 2;
+			var y = Math.random() * range - range / 2;
+			var z = Math.random() * range - range / 2;
+			model.position.x = x;
+			model.position.y = y;
+			model.position.z = z;
 		}
 
 
