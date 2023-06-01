@@ -43,7 +43,7 @@
 
 			loader.load('./aMigus/mauricio.glb', function(gltf) {
 				const model = gltf.scene;
-				model.scale.set(0.1, 0.1, 0.1);
+				model.scale.set(0.1, 0.8, 0.1);
 				model.rotation.set(0, Math.PI / 2, 0);
 				placeModelRandomly(model); // Coloca el modelo en una posición aleatoria
 				scene.add(model);
