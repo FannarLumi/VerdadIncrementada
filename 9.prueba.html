@@ -29,10 +29,6 @@
 
 			scene = new THREE.Scene();
 
-			getRandomX();
-			getRandomY();
-			getRandomZ();
-
 			camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 40);
 
 			renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
@@ -52,28 +48,13 @@
 				model.scale.set(0.1, 0.1, 0.1);
 				model.rotation.set(0, Math.PI / 2, 0);
 				// Coloca el modelo en una posición aleatoria
-				model.position.x = x;
-				model.position.y = y;
-				model.position.z = z;
+				model.position.x = getRandomX();
+				model.position.y = getRandomY();
+				model.position.z = getRandomZ();
 				scene.add(model);
 
 				mesh = model;
 			});
-			
-			/*
-			const geometry = new THREE.IcosahedronGeometry(0.1, 1);
-			const material = new THREE.MeshPhongMaterial({
-				color: new THREE.Color("rgb(226,35,213)"),
-				shininess: 6,
-				flatShading: true,
-				transparent: 1,
-				opacity: 0.00001
-			});
-
-			mesh = new THREE.Mesh(geometry, material);
-			mesh.position.set(x, y, z);
-			scene.add(mesh);
-			*/
 
 			document.body.appendChild(ARButton.createButton(renderer));
 
@@ -144,17 +125,23 @@
 		}
 
 		function getRandomX() {
-			var x = Math.random() * range - range / 2;
+			while(x != 0){
+				var x = Math.random() * range - range / 2;
+			}
 			return x;
 		}
 
 		function getRandomY() {
-			var y = Math.random() * range - range / 2;
+			while(y != 0){
+				var y = Math.random() * range - range / 2;
+			}
 			return y;
 		}
 
 		function getRandomZ() {
-			var z = Math.random() * range - range / 2;
+			while(z != 0){
+				var z = Math.random() * range - range / 2;
+			}
 			return z;
 		}
 
