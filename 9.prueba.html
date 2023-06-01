@@ -43,12 +43,12 @@
 
 
 			loader.load('./aMigus/mauricio.glb', function(gltf) {
-            model = gltf.scene;
-            // Ajusta la escala, rotación y posición según tus necesidades
-            model.scale.set(0.1, 0.1, 0.1);
-            model.rotation.set(0, Math.PI / 2, 0);
-            model.position.set(0, 0, -0.5);
-            scene.add(model);
+				model = gltf.scene;
+				// Ajusta la escala, rotación y posición según tus necesidades
+				model.scale.set(0.1, 0.1, 0.1);
+				model.rotation.set(0, Math.PI / 2, 0);
+				model.position.set(0, 0, -0.5);
+				scene.add(model);
         	});
 
 			/*
@@ -66,6 +66,7 @@
 
             window.addEventListener('resize', onWindowResize, false);
             renderer.domElement.addEventListener('click', onClick, false);
+			renderer.domElement.addEventListener('touchstart', onTouchStart, false);
         }
 
         function onWindowResize() {
@@ -87,19 +88,19 @@
             renderer.render(scene, camera);
         }
 
-        function onClick(event) {
-            event.preventDefault();
+        function onTouchStart(event) {
+			event.preventDefault();
 
-            const boundingRect = renderer.domElement.getBoundingClientRect();
-            const mouseX = event.clientX - boundingRect.left;
-            const mouseY = event.clientY - boundingRect.top;
+			const boundingRect = renderer.domElement.getBoundingClientRect();
+			const touchX = event.touches[0].clientX - boundingRect.left;
+			const touchY = event.touches[0].clientY - boundingRect.top;
 
-            const intersects = getIntersects(mouseX, mouseY);
-            if (intersects.length > 0 && intersects[0].object === model) {
-                // Desaparece la figura al hacer tap
-                scene.remove(model);
-            }
-        }
+			const intersects = getIntersects(touchX, touchY);
+			if (intersects.length > 0 && intersects[0].object === model) {
+				// Desaparece la figura al hacer tap
+				scene.remove(model);
+			}
+		}
 
         function getIntersects(x, y) {
             const mouse = new THREE.Vector2();
