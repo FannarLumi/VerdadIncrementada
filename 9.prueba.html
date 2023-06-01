@@ -41,7 +41,8 @@
 			scene.add(light);
 
 			const loader = new THREE.GLTFLoader();
-
+			
+			//Carga el modelo de Mauricio
 			loader.load('./aMigus/mauricio.glb', function(gltf) {
 				const model = gltf.scene;
 				model.scale.set(0.1, 0.1, 0.1);
