@@ -40,15 +40,12 @@
 			scene.add(light);
 
 			const loader = new THREE.GLTFLoader();
-			//Esto hace que el aMigü se genere
+
 			loader.load('./aMigus/mauricio.glb', function(gltf) {
 				const model = gltf.scene;
 				model.scale.set(0.1, 0.1, 0.1);
 				model.rotation.set(0, Math.PI / 2, 0);
-				// Coloca el modelo en una posición aleatoria
-				model.position.x = getRandomX();
-				model.position.y = getRandomY();
-				model.position.z = getRandomZ();
+				placeModelRandomly(model); // Coloca el modelo en una posición aleatoria
 				scene.add(model);
 
 				mesh = model;
@@ -70,7 +67,7 @@
 		function animate() {
 			renderer.setAnimationLoop(render);
 
-			if (isMeshVisible) {
+			if (mesh) {
 				mesh.rotation.y += 0.01;
 			}
 		}
@@ -122,32 +119,12 @@
 			return null;
 		}
 
-		function getRandomX() {
-			var x = Math.random() * range - range / 2;
-			return x;
-		}
-
-		function getRandomY() {
-			var y = Math.random() * range - range / 2;
-			return y;
-		}
-
-		function getRandomZ() {
-			var z = Math.random() * range - range / 2;
-			return z;
-		}
-
-		/*
 		function placeModelRandomly(model) {
 			const range = 3; // Rango de posición en el que se generará aleatoriamente el modelo
-			var x = Math.random() * range - range / 2;
-			var y = Math.random() * range - range / 2;
-			var z = Math.random() * range - range / 2;
-			model.position.x = x;
-			model.position.y = y;
-			model.position.z = z;
+			model.position.x = Math.random() * range - range / 2;
+			model.position.y = Math.random() * range - range / 2;
+			model.position.z = Math.random() * range - range / 2;
 		}
-		*/
 
 
 	</script>
