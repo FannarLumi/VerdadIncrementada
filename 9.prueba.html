@@ -64,6 +64,13 @@
 			renderer.setSize(window.innerWidth, window.innerHeight);
 		}
 
+		function animate() {
+			renderer.setAnimationLoop(render);
+
+			if (isMeshVisible) {
+				mesh.rotation.y += 40;
+			}
+		}
 
 		function render() {
 			renderer.render(scene, camera);
@@ -78,10 +85,10 @@
 			const mouseY = event.clientY - boundingRect.top;
 
 			const intersected = checkIntersection(mouseX, mouseY);
-			if (intersected && intersected.object === model) {
+			if (intersected && intersected.object === mesh) {
 				// Cambia la visibilidad de la figura solo si estaba visible
 				if (isMeshVisible) {
-					model.visible = false;
+					mesh.visible = false;
 					isMeshVisible = false;
 					// Redirecciona a uno de los enlaces aleatoriamente
 					const links = [
