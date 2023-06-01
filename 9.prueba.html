@@ -45,11 +45,11 @@
                 model.scale.set(0.1, 0.1, 0.1);
                 model.rotation.set(0, Math.PI / 2, 0);
                 placeModelRandomly(model);
-				mesh = model;
             });
-
-			scene.add(mesh);
 			
+			mesh = model;
+			scene.add(mesh);
+
             document.body.appendChild(ARButton.createButton(renderer));
 
             window.addEventListener('resize', onWindowResize, false);
