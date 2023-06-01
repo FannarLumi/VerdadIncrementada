@@ -2,163 +2,112 @@
 <html lang="en">
 
 <head>
-	<title>Random Position in WebXR</title>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-	<link type="text/css" rel="stylesheet" href="style.css">
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r126/three.js" crossorigin="anonymous"></script>
-	<script src="https://cdn.jsdelivr.net/npm/three/examples/js/loaders/GLTFLoader.js"></script>
+    <title>Random Position in WebXR</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <link type="text/css" rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r126/three.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three/examples/js/loaders/GLTFLoader.js"></script>
 </head>
 
 <body>
-	<script type="module">
-		import { ARButton } from 'https://unpkg.com/three@0.126.0/examples/jsm/webxr/ARButton.js';
+    <script type="module">
+        import { ARButton } from 'https://unpkg.com/three@0.126.0/examples/jsm/webxr/ARButton.js';
 
-		let camera, scene, renderer;
-		let mesh;
-		let isMeshVisible = true;
+        let camera, scene, renderer;
+        let mesh;
 
-		var x, y, z;
+        init();
+        animate();
 
-		init();
-		animate();
+        function init() {
+            const container = document.createElement('div');
+            document.body.appendChild(container);
 
-		function init() {
-			const container = document.createElement('div');
-			document.body.appendChild(container);
+            scene = new THREE.Scene();
 
-			scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 40);
 
-			camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 40);
+            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.xr.enabled = true;
+            container.appendChild(renderer.domElement);
 
-			renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-			renderer.setPixelRatio(window.devicePixelRatio);
-			renderer.setSize(window.innerWidth, window.innerHeight);
-			renderer.xr.enabled = true;
-			container.appendChild(renderer.domElement);
+            const light = new THREE.HemisphereLight(0xffffff, 0xbbbbff, 1);
+            light.position.set(0.5, 1, 0.25);
+            scene.add(light);
 
-			var light = new THREE.HemisphereLight(0xffffff, 0xbbbbff, 1);
-			light.position.set(0.5, 1, 0.25);
-			scene.add(light);
+            const loader = new THREE.GLTFLoader();
 
-			const loader = new THREE.GLTFLoader();
-			//Esto hace que el aMigü se genere
-			loader.load('./aMigus/mauricio.glb', function(gltf) {
-				const model = gltf.scene;
-				model.scale.set(0.1, 0.1, 0.1);
-				model.rotation.set(0, Math.PI / 2, 0);
-				// Coloca el modelo en una posición aleatoria
-				model.position.x = getRandomX();
-				model.position.y = getRandomY();
-				model.position.z = getRandomZ();
-				scene.add(model);
+            loader.load('./aMigus/mauricio.glb', function (gltf) {
+                const model = gltf.scene;
+                model.scale.set(0.1, 0.1, 0.1);
+                model.rotation.set(0, Math.PI / 2, 0);
+                placeModelRandomly(model);
+                scene.add(model);
 
-				mesh = model;
-			});
+                mesh = model;
+            });
 
-			document.body.appendChild(ARButton.createButton(renderer));
+            document.body.appendChild(ARButton.createButton(renderer));
 
-			window.addEventListener('resize', onWindowResize, false);
-			renderer.domElement.addEventListener('click', onClick, false);
-		}
+            window.addEventListener('resize', onWindowResize, false);
+            renderer.domElement.addEventListener('click', onClick, false);
+        }
 
-		function onWindowResize() {
-			camera.aspect = window.innerWidth / window.innerHeight;
-			camera.updateProjectionMatrix();
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
 
-			renderer.setSize(window.innerWidth, window.innerHeight);
-		}
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
 
-		function animate() {
-			renderer.setAnimationLoop(render);
+        function animate() {
+            renderer.setAnimationLoop(render);
 
-			if (isMeshVisible) {
-				mesh.rotation.y += 0.01;
-			}
-		}
+            if (mesh) {
+                mesh.rotation.y += 0.01;
+            }
+        }
 
-		function render() {
-			renderer.render(scene, camera);
-		}
+        function render() {
+            renderer.render(scene, camera);
+        }
 
-		function onClick(event) {
-			event.preventDefault();
+        function onClick(event) {
+            event.preventDefault();
 
-			// Comprueba si el clic se hizo en la figura
-			const boundingRect = renderer.domElement.getBoundingClientRect();
-			const mouseX = event.clientX - boundingRect.left;
-			const mouseY = event.clientY - boundingRect.top;
+            const boundingRect = renderer.domElement.getBoundingClientRect();
+            const mouseX = event.clientX - boundingRect.left;
+            const mouseY = event.clientY - boundingRect.top;
 
-			const intersected = checkIntersection(mouseX, mouseY);
-			if (intersected && intersected.object === mesh) {
-				// Cambia la visibilidad de la figura solo si estaba visible
-				if (isMeshVisible) {
-					mesh.visible = false;
-					isMeshVisible = false;
-					// Redirecciona a uno de los enlaces aleatoriamente
-					const links = [
-						'https://www.youtube.com/',
-						'https://www.amazon.com.mx/',
-						'https://www.twitch.tv/'
-					];
-					const randomIndex = Math.floor(Math.random() * links.length);
-					window.location.href = links[randomIndex];
-				}
-			}
-		}
+            const intersects = getIntersects(mouseX, mouseY);
+            if (intersects.length > 0 && intersects[0].object === mesh) {
+                // Desaparece la figura al hacer tap
+                scene.remove(mesh);
+            }
+        }
 
-		function checkIntersection(x, y) {
-			const mouse = new THREE.Vector2();
-			mouse.x = (x / window.innerWidth) * 2 - 1;
-			mouse.y = -(y / window.innerHeight) * 2 + 1;
+        function getIntersects(x, y) {
+            const mouse = new THREE.Vector2();
+            mouse.x = (x / window.innerWidth) * 2 - 1;
+            mouse.y = -(y / window.innerHeight) * 2 + 1;
 
-			const raycaster = new THREE.Raycaster();
-			raycaster.setFromCamera(mouse, camera);
+            const raycaster = new THREE.Raycaster();
+            raycaster.setFromCamera(mouse, camera);
 
-			const intersects = raycaster.intersectObjects(scene.children, true);
+            return raycaster.intersectObjects(scene.children, true);
+        }
 
-			if (intersects.length > 0) {
-				return intersects[0];
-			}
+        function placeModelRandomly(model) {
+            const range = 3;
+            model.position.x = Math.random() * range - range / 2;
+            model.position.y = Math.random() * range - range / 2;
+            model.position.z = Math.random() * range - range / 2;
+        }
 
-			return null;
-		}
-
-		function getRandomX() {
-			while(x != 0){
-				var x = Math.random() * range - range / 2;
-			}
-			return x;
-		}
-
-		function getRandomY() {
-			while(y != 0){
-				var y = Math.random() * range - range / 2;
-			}
-			return y;
-		}
-
-		function getRandomZ() {
-			while(z != 0){
-				var z = Math.random() * range - range / 2;
-			}
-			return z;
-		}
-
-		/*
-		function placeModelRandomly(model) {
-			const range = 3; // Rango de posición en el que se generará aleatoriamente el modelo
-			var x = Math.random() * range - range / 2;
-			var y = Math.random() * range - range / 2;
-			var z = Math.random() * range - range / 2;
-			model.position.x = x;
-			model.position.y = y;
-			model.position.z = z;
-		}
-		*/
-
-
-	</script>
+    </script>
 </body>
 
 </html>
