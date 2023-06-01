@@ -67,8 +67,8 @@
 		function animate() {
 			renderer.setAnimationLoop(render);
 
-			if (mesh) {
-				mesh.rotation.y += 0.01;
+			if (isMeshVisible) {
+				mesh.rotation.y += 1;
 			}
 		}
 
@@ -124,6 +124,11 @@
 			model.position.x = Math.random() * range - range / 2;
 			model.position.y = Math.random() * range - range / 2;
 			model.position.z = Math.random() * range - range / 2;
+		}
+
+		function getRandomPosition() {
+			// Genera una posición aleatoria entre -2 y 2
+			return Math.random() * 4 - 2;
 		}
 
 	</script>
