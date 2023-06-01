@@ -79,13 +79,26 @@
 		function onClick(event) {
 			event.preventDefault();
 
+			// Comprueba si el clic se hizo en la figura
 			const boundingRect = renderer.domElement.getBoundingClientRect();
 			const mouseX = event.clientX - boundingRect.left;
 			const mouseY = event.clientY - boundingRect.top;
 
 			const intersected = checkIntersection(mouseX, mouseY);
 			if (intersected && intersected.object === mesh) {
-				window.location.href = 'https://www.youtube.com';
+				// Cambia la visibilidad de la figura solo si estaba visible
+				if (isMeshVisible) {
+					mesh.visible = false;
+					isMeshVisible = false;
+					// Redirecciona a uno de los enlaces aleatoriamente
+					const links = [
+						'https://www.youtube.com/',
+						'https://www.amazon.com.mx/',
+						'https://www.twitch.tv/'
+					];
+					const randomIndex = Math.floor(Math.random() * links.length);
+					window.location.href = links[randomIndex];
+				}
 			}
 		}
 
