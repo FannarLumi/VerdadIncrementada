@@ -46,8 +46,15 @@
 				const model = gltf.scene;
 				model.scale.set(0.1, 0.1, 0.1);
 				model.rotation.set(0, Math.PI / 2, 0);
-				placeModelRandomly(model); // Coloca el modelo en una posición aleatoria
+				//placeModelRandomly(model); 
+				// Coloca el modelo en una posición aleatoria
 				scene.add(model);
+				posX = Math.random() * range - range / 2;
+				model.position.x = posX;
+				posY = Math.random() * range - range / 2;
+				model.position.y = posY;
+				posZ = Math.random() * range - range / 2;
+				model.position.z = posZ;
 
 				mesh = model;
 			});
@@ -120,13 +127,14 @@
 			return null;
 		}
 
+		/*
 		function placeModelRandomly(model) {
 			const range = 3; // Rango de posición en el que se generará aleatoriamente el modelo
 			model.position.x = Math.random() * range - range / 2;
 			model.position.y = Math.random() * range - range / 2;
 			model.position.z = Math.random() * range - range / 2;
 		}
-
+		*/
 
 	</script>
 </body>
