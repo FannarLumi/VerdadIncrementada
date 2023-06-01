@@ -68,7 +68,7 @@
 			renderer.setAnimationLoop(render);
 
 			if (isMeshVisible) {
-				mesh.rotation.y += 1;
+				mesh.rotation.y += 40;
 			}
 		}
 
@@ -85,7 +85,7 @@
 			const mouseY = event.clientY - boundingRect.top;
 
 			const intersected = checkIntersection(mouseX, mouseY);
-			if (intersected && intersected.object === mesh) {
+			if (intersected && intersected.object === model) {
 				// Cambia la visibilidad de la figura solo si estaba visible
 				if (isMeshVisible) {
 					mesh.visible = false;
@@ -126,10 +126,6 @@
 			model.position.z = Math.random() * range - range / 2;
 		}
 
-		function getRandomPosition() {
-			// Genera una posición aleatoria entre -2 y 2
-			return Math.random() * 4 - 2;
-		}
 
 	</script>
 </body>
