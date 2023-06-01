@@ -16,6 +16,7 @@
 
         let camera, scene, renderer;
         let mesh;
+		let model; // Variable para almacenar el modelo 3D
 
         init();
         animate();
@@ -40,15 +41,26 @@
 
             const loader = new THREE.GLTFLoader();
 
+
+			loader.load('./aMigus/mauricio.glb', function(gltf) {
+            model = gltf.scene;
+            // Ajusta la escala, rotación y posición según tus necesidades
+            model.scale.set(0.1, 0.1, 0.1);
+            model.rotation.set(0, Math.PI / 2, 0);
+            model.position.set(0, 0, -0.5);
+            scene.add(model);
+        	});
+
+			/*
             loader.load('./aMigus/mauricio.glb', function (gltf) {
                 const model = gltf.scene;
                 model.scale.set(0.1, 0.1, 0.1);
                 model.rotation.set(0, Math.PI / 2, 0);
                 placeModelRandomly(model);
+				mesh = model;
+				scene.add(mesh);
             });
-			
-			mesh = model;
-			scene.add(mesh);
+			*/
 
             document.body.appendChild(ARButton.createButton(renderer));
 
@@ -66,8 +78,8 @@
         function animate() {
             renderer.setAnimationLoop(render);
 
-            if (mesh) {
-                mesh.rotation.y += 0.01;
+            if (model) {
+                model.rotation.y += 0.01;
             }
         }
 
@@ -83,9 +95,9 @@
             const mouseY = event.clientY - boundingRect.top;
 
             const intersects = getIntersects(mouseX, mouseY);
-            if (intersects.length > 0 && intersects[0].object === mesh) {
+            if (intersects.length > 0 && intersects[0].object === model) {
                 // Desaparece la figura al hacer tap
-                scene.remove(mesh);
+                scene.remove(model);
             }
         }
 
