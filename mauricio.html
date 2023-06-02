@@ -2,129 +2,143 @@
 <html lang="en">
 
 <head>
-	<title>Experiencia Mauricio</title>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-	<link type="text/css" rel="stylesheet" href="style.css">
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r126/three.js" crossorigin="anonymous"></script>
+    <title>Random Position in WebXR</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <link type="text/css" rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r126/three.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three/examples/js/loaders/GLTFLoader.js"></script>
 </head>
 
 <body>
-	<script type="module">
-		// To start an AR scene with webXR, we can use a handy button provided by three.js
-		// We first have to import it because it is a javascript module
-		import { ARButton } from 'https://unpkg.com/three@0.126.0/examples/jsm/webxr/ARButton.js';
+    <script type="module">
+        import { ARButton } from './ARButton.js';
 
-		let camera, scene, renderer;
-		let mesh;
-		let isMeshVisible = true;
+        let camera, scene, renderer;
+        let mesh, mesh1;
+        let isMeshVisible = true;
+        let posX, posY, posZ;
+        let sphere;
 
-		init();
-		animate();
+        init();
+        animate();
 
-		function init() {
-			const container = document.createElement('div');
-			document.body.appendChild(container);
+        function init() {
+            const container = document.createElement('div');
+            document.body.appendChild(container);
 
-			scene = new THREE.Scene();
+            scene = new THREE.Scene();
 
-			camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 40);
+            camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 40);
 
-			renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-			renderer.setPixelRatio(window.devicePixelRatio);
-			renderer.setSize(window.innerWidth, window.innerHeight);
-			// This next line is important to enable the renderer for WebXR
-			renderer.xr.enabled = true; // New!
-			container.appendChild(renderer.domElement);
+            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.xr.enabled = true;
+            container.appendChild(renderer.domElement);
 
-			var light = new THREE.HemisphereLight(0xffffff, 0xbbbbff, 1);
-			light.position.set(0.5, 1, 0.25);
-			scene.add(light);
+            var light = new THREE.HemisphereLight(0xffffff, 0xbbbbff, 1);
+            light.position.set(0.5, 1, 0.25);
+            scene.add(light);
 
-			const geometry = new THREE.IcosahedronGeometry(0.1, 1);
-			const material = new THREE.MeshPhongMaterial({
-				color: new THREE.Color("rgb(226,35,213)"),
-				shininess: 6,
-				flatShading: true,
-				transparent: 1,
-				opacity: 0.8
-			});
+            const loader = new THREE.GLTFLoader();
 
-			mesh = new THREE.Mesh(geometry, material);
-			mesh.position.set(getRandomPosition(), getRandomPosition(), -0.5);
-			scene.add(mesh);
+            loader.load('./aMigus/mauricio.glb', function(gltf) {
+                const model = gltf.scene;
+                const range = 3;
+                model.scale.set(0.1, 0.1, 0.1);
+                model.rotation.set(0, Math.PI / 2, 0);
+                scene.add(model);
+                posX = Math.random() * range - range / 2;
+                model.position.x = posX;
+                posY = Math.random() * range - range / 2;
+                model.position.y = posY;
+                posZ = Math.random() * range - range / 2;
+                model.position.z = posZ;
 
-			// Add the AR button to the body of the DOM
-			document.body.appendChild(ARButton.createButton(renderer));
+                mesh = model;
 
-			window.addEventListener('resize', onWindowResize, false);
-			renderer.domElement.addEventListener('click', onClick, false);
-		}
+                // Código para generar una esfera
+                const sphereGeometry = new THREE.SphereGeometry(0.3, 32, 32);
+                const sphereMaterial = new THREE.MeshBasicMaterial({ 
+                    color: new THREE.Color("rgb(226,35,213)"),
+					shininess: 6,
+					flatShading: true,
+					transparent: 1,
+					opacity: 0.0001 
+                });
+                sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+                sphere.position.copy(model.position); // Copia la posición del modelo
+                scene.add(sphere);
+            });
 
-		function onWindowResize() {
-			camera.aspect = window.innerWidth / window.innerHeight;
-			camera.updateProjectionMatrix();
+            document.body.appendChild(ARButton.createButton(renderer));
 
-			renderer.setSize(window.innerWidth, window.innerHeight);
-		}
+            window.addEventListener('resize', onWindowResize, false);
+            renderer.domElement.addEventListener('click', onClick, false);
+        }
 
-		function animate() {
-			renderer.setAnimationLoop(render);
-		}
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
 
-		function render() {
-			renderer.render(scene, camera);
-		}
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
 
-		function onClick(event) {
-			event.preventDefault();
+        function animate() {
+            renderer.setAnimationLoop(render);
+        }
 
-			// Comprueba si el clic se hizo en la figura
-			const boundingRect = renderer.domElement.getBoundingClientRect();
-			const mouseX = event.clientX - boundingRect.left;
-			const mouseY = event.clientY - boundingRect.top;
+        function render() {
+            renderer.render(scene, camera);
+        }
 
-			const intersected = checkIntersection(mouseX, mouseY);
-			if (intersected && intersected.object === mesh) {
-				// Cambia la visibilidad de la figura solo si estaba visible
-				if (isMeshVisible) {
-					mesh.visible = false;
-					isMeshVisible = false;
-					// Redirecciona a uno de los enlaces aleatoriamente
-					const links = [
-						'https://www.youtube.com/',
-						'https://www.amazon.com.mx/',
-						'https://www.twitch.tv/'
-					];
-					const randomIndex = Math.floor(Math.random() * links.length);
-					window.location.href = links[randomIndex];
-				}
-			}
-		}
+        function onClick(event) {
+            event.preventDefault();
 
-		function checkIntersection(x, y) {
-			const mouse = new THREE.Vector2();
-			mouse.x = (x / window.innerWidth) * 2 - 1;
-			mouse.y = -(y / window.innerHeight) * 2 + 1;
+            // Comprueba si el clic se hizo en la figura
+            const boundingRect = renderer.domElement.getBoundingClientRect();
+            const mouseX = event.clientX - boundingRect.left;
+            const mouseY = event.clientY - boundingRect.top;
 
-			const raycaster = new THREE.Raycaster();
-			raycaster.setFromCamera(mouse, camera);
+            const intersected = checkIntersection(mouseX, mouseY);
+            if (intersected && intersected.object === sphere) {
+                // Oculta la esfera
+                scene.remove(sphere);
+                if(isMeshVisible){
+                    isMeshVisible = false;
+                // Redirecciona a uno de los enlaces aleatoriamente
+                const links = [
+                    'https://www.youtube.com/',
+                    'https://www.amazon.com.mx/',
+                    'https://www.twitch.tv/'
+                ];
+                const randomIndex = Math.floor(Math.random() * links.length);
+                window.location.href = links[randomIndex];
+            
+                }
+            }
+        }
 
-			const intersects = raycaster.intersectObjects(scene.children, true);
 
-			if (intersects.length > 0) {
-				return intersects[0];
-			}
+        function checkIntersection(x, y) {
+            const mouse = new THREE.Vector2();
+            mouse.x = (x / window.innerWidth) * 2 - 1;
+            mouse.y = -(y / window.innerHeight) * 2 + 1;
 
-			return null;
-		}
+            const raycaster = new THREE.Raycaster();
+            raycaster.setFromCamera(mouse, camera);
 
-		function getRandomPosition() {
-			// Genera una posición aleatoria entre -2 y 2
-			return Math.random() * 4 - 2;
-		}
+            const intersects = raycaster.intersectObjects(scene.children, true);
 
-	</script>
+            if (intersects.length > 0) {
+                return intersects[0];
+            }
+
+            return null;
+        }
+
+    </script>
 </body>
 
 </html>
