@@ -99,22 +99,19 @@
             if (intersected && intersected.object === sphere) {
                 // Oculta la esfera
                 scene.remove(sphere);
-            } else if (intersected && intersected.object === mesh) {
-                // Cambia la visibilidad de la figura solo si estaba visible
-                if (isMeshVisible) {
-                    mesh.visible = false;
-                    isMeshVisible = false;
-                    // Redirecciona a uno de los enlaces aleatoriamente
-                    const links = [
-                        'https://www.youtube.com/',
-                        'https://www.amazon.com.mx/',
-                        'https://www.twitch.tv/'
-                    ];
-                    const randomIndex = Math.floor(Math.random() * links.length);
-                    window.location.href = links[randomIndex];
-                }
+
+                // Redirecciona a uno de los enlaces aleatoriamente
+                const links = [
+                    'https://www.youtube.com/',
+                    'https://www.amazon.com.mx/',
+                    'https://www.twitch.tv/'
+                ];
+                const randomIndex = Math.floor(Math.random() * links.length);
+                window.location.href = links[randomIndex];
+            
             }
         }
+
 
         function checkIntersection(x, y) {
             const mouse = new THREE.Vector2();
