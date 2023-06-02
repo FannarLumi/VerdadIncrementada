@@ -2,158 +2,135 @@
 <html lang="en">
 
 <head>
-    <title>Combined Scene with WebXR</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <link type="text/css" rel="stylesheet" href="style.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r126/three.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three/examples/js/loaders/GLTFLoader.js"></script>
-    <script src="https://unpkg.com/three@0.126.0/examples/jsm/webxr/ARButton.js"></script>
+	<title>Random Position in WebXR</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+	<link type="text/css" rel="stylesheet" href="style.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r126/three.js" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/three/examples/js/loaders/GLTFLoader.js"></script>
 </head>
 
 <body>
-    <script type="module">
+	<script type="module">
+		import { ARButton } from './ARButton.js';
 
-        let camera, scene, renderer;
-        let mesh1, mesh2;
-        let isMesh1Visible = true;
-        let isMesh2Visible = true;
+		let camera, scene, renderer;
+		let mesh, mesh1;
+		let isMeshVisible = true;
+		let posX, posY, posZ;
 
-        init();
-        animate();
+		init();
+		animate();
 
-        function init() {
-            const container = document.createElement('div');
-            document.body.appendChild(container);
+		function init() {
+			const container = document.createElement('div');
+			document.body.appendChild(container);
 
-            scene = new THREE.Scene();
+			scene = new THREE.Scene();
 
-            camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 40);
+			camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 40);
 
-            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-            renderer.setPixelRatio(window.devicePixelRatio);
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.xr.enabled = true;
-            container.appendChild(renderer.domElement);
+			renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+			renderer.setPixelRatio(window.devicePixelRatio);
+			renderer.setSize(window.innerWidth, window.innerHeight);
+			renderer.xr.enabled = true;
+			container.appendChild(renderer.domElement);
 
-            var light = new THREE.HemisphereLight(0xffffff, 0xbbbbff, 1);
-            light.position.set(0.5, 1, 0.25);
-            scene.add(light);
+			var light = new THREE.HemisphereLight(0xffffff, 0xbbbbff, 1);
+			light.position.set(0.5, 1, 0.25);
+			scene.add(light);
 
-            const loader = new THREE.GLTFLoader();
+			const loader = new THREE.GLTFLoader();
 
-            loader.load('./aMigus/mauricio.glb', function(gltf) {
-                const model = gltf.scene;
-                const range = 3;
-                model.scale.set(0.1, 0.1, 0.1);
-                model.rotation.set(0, Math.PI / 2, 0);
-                scene.add(model);
-                posX = Math.random() * range - range / 2;
-                model.position.x = posX;
-                posY = Math.random() * range - range / 2;
-                model.position.y = posY;
-                posZ = Math.random() * range - range / 2;
-                model.position.z = posZ;
+			loader.load('./aMigus/mauricio.glb', function(gltf) {
+				const model = gltf.scene;
+				const range = 3;
+				model.scale.set(0.1, 0.1, 0.1);
+				model.rotation.set(0, Math.PI / 2, 0);
+				scene.add(model);
+				posX = Math.random() * range - range / 2;
+				model.position.x = posX;
+				posY = Math.random() * range - range / 2;
+				model.position.y = posY;
+				posZ = Math.random() * range - range / 2;
+				model.position.z = posZ;
 
-                mesh = model;
+				mesh = model;
 
-                // Código para generar una esfera
-                const sphereGeometry = new THREE.SphereGeometry(0.1, 32, 32);
-                const sphereMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
-                const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
-                sphere.position.copy(model.position); // Copia la posición del modelo
-                scene.add(sphere);
-            });
+				// Código para generar una esfera
+				const sphereGeometry = new THREE.SphereGeometry(0.1, 32, 32);
+				const sphereMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+				const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+				sphere.position.copy(model.position); // Copia la posición del modelo
+				scene.add(sphere);
+			});
 
-            document.body.appendChild(ARButton.createButton(renderer));
+			document.body.appendChild(ARButton.createButton(renderer));
 
-            window.addEventListener('resize', onWindowResize, false);
-            renderer.domElement.addEventListener('click', onClick, false);
-        }
+			window.addEventListener('resize', onWindowResize, false);
+			renderer.domElement.addEventListener('click', onClick, false);
+		}
 
-        function onWindowResize() {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
+		function onWindowResize() {
+			camera.aspect = window.innerWidth / window.innerHeight;
+			camera.updateProjectionMatrix();
 
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        }
+			renderer.setSize(window.innerWidth, window.innerHeight);
+		}
 
-        function animate() {
-            renderer.setAnimationLoop(render);
+		function animate() {
+			renderer.setAnimationLoop(render);
+		}
 
-            if (mesh1) {
-                mesh1.rotation.y += 0.01;
-            }
+		function render() {
+			renderer.render(scene, camera);
+		}
 
-            if (mesh2) {
-                mesh2.rotation.y += 0.01;
-            }
-        }
+		function onClick(event) {
+			event.preventDefault();
 
-        function render() {
-            renderer.render(scene, camera);
-        }
+			// Comprueba si el clic se hizo en la figura
+			const boundingRect = renderer.domElement.getBoundingClientRect();
+			const mouseX = event.clientX - boundingRect.left;
+			const mouseY = event.clientY - boundingRect.top;
 
-        function onClick(event) {
-            event.preventDefault();
+			const intersected = checkIntersection(mouseX, mouseY);
+			if (intersected && intersected.object === mesh) {
+				// Cambia la visibilidad de la figura solo si estaba visible
+				if (isMeshVisible) {
+					mesh.visible = false;
+					isMeshVisible = false;
+					// Redirecciona a uno de los enlaces aleatoriamente
+					const links = [
+						'https://www.youtube.com/',
+						'https://www.amazon.com.mx/',
+						'https://www.twitch.tv/'
+					];
+					const randomIndex = Math.floor(Math.random() * links.length);
+					window.location.href = links[randomIndex];
+				}
+			}
+		}
 
-            const boundingRect = renderer.domElement.getBoundingClientRect();
-            const mouseX = event.clientX - boundingRect.left;
-            const mouseY = event.clientY - boundingRect.top;
+		function checkIntersection(x, y) {
+			const mouse = new THREE.Vector2();
+			mouse.x = (x / window.innerWidth) * 2 - 1;
+			mouse.y = -(y / window.innerHeight) * 2 + 1;
 
-            const intersected1 = checkIntersection(mouseX, mouseY, mesh1);
-            if (intersected1 && intersected1.object === mesh1) {
-                if (isMesh1Visible) {
-                    mesh1.visible = false;
-                    isMesh1Visible = false;
-                    const links = [
-                        'https://www.youtube.com/',
-                        'https://www.amazon.com.mx/',
-                        'https://www.twitch.tv/'
-                    ];
-                    const randomIndex = Math.floor(Math.random() * links.length);
-                    window.location.href = links[randomIndex];
-                }
-            }
+			const raycaster = new THREE.Raycaster();
+			raycaster.setFromCamera(mouse, camera);
 
-            const intersected2 = checkIntersection(mouseX, mouseY, mesh2);
-            if (intersected2 && intersected2.object === mesh2) {
-                if (isMesh2Visible) {
-                    mesh2.visible = false;
-                    isMesh2Visible = false;
-                    const links = [
-                        'https://www.youtube.com/',
-                        'https://www.amazon.com.mx/',
-                        'https://www.twitch.tv/'
-                    ];
-                    const randomIndex = Math.floor(Math.random() * links.length);
-                    window.location.href = links[randomIndex];
-                }
-            }
-        }
+			const intersects = raycaster.intersectObjects(scene.children, true);
 
-        function checkIntersection(x, y, mesh) {
-            const mouse = new THREE.Vector2();
-            mouse.x = (x / window.innerWidth) * 2 - 1;
-            mouse.y = -(y / window.innerHeight) * 2 + 1;
+			if (intersects.length > 0) {
+				return intersects[0];
+			}
 
-            const raycaster = new THREE.Raycaster();
-            raycaster.setFromCamera(mouse, camera);
+			return null;
+		}
 
-            const intersects = raycaster.intersectObject(mesh, true);
-
-            if (intersects.length > 0) {
-                return intersects[0];
-            }
-
-            return null;
-        }
-
-        function getRandomPosition() {
-            return Math.random() * 4 - 2;
-        }
-
-    </script>
+	</script>
 </body>
 
 </html>
+
