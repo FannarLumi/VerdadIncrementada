@@ -57,6 +57,20 @@
                 model.position.z = posZ;
 
                 mesh = model;
+
+                // Código para generar una esfera invisible
+                const sphereGeometry = new THREE.SphereGeometry(0.3, 32, 32);
+                const sphereMaterial = new THREE.MeshStandardMaterial({
+                    color: new THREE.Color("rgb(226,35,213)"),
+                    roughness: 1,
+                    metalness: 0,
+                    transparent: true,
+                    opacity: 0
+                });
+                sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+                sphere.position.copy(mesh.position); // Copia la posición del modelo
+                scene.add(sphere);
+                sphere.visible = false; // Hace que la esfera sea invisible
             });
 
             document.body.appendChild(ARButton.createButton(renderer));
@@ -127,18 +141,6 @@
             return null;
         }
 
-        // Código para generar una esfera invisible
-        const sphereGeometry = new THREE.SphereGeometry(0.3, 32, 32);
-        const sphereMaterial = new THREE.MeshStandardMaterial({
-            color: new THREE.Color("rgb(226,35,213)"),
-            roughness: 1,
-            metalness: 0,
-            transparent: true,
-            opacity: 0
-        });
-        sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
-        sphere.visible = false; // Hace que la esfera sea invisible inicialmente
-        scene.add(sphere);
 
     </script>
 </body>
