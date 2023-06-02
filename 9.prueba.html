@@ -73,14 +73,6 @@
 			renderer.setSize(window.innerWidth, window.innerHeight);
 		}
 
-		function animate() {
-			renderer.setAnimationLoop(render);
-
-			if (mesh) {
-				mesh.rotation.y += 0.01;
-			}
-		}
-
 		function render() {
 			renderer.render(scene, camera);
 		}
