@@ -65,7 +65,7 @@ class ARButton {
 
 				currentSession.removeEventListener( 'end', onSessionEnded );
 
-				button.textContent = 'AY YA WEY';
+				button.textContent = 'START AR';
 				sessionInit.domOverlay.root.style.display = 'none';
 
 				currentSession = null;

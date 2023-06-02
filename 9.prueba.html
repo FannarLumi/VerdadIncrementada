@@ -56,9 +56,11 @@
 				model.position.y = posY;
 				posZ = Math.random() * range - range / 2;
 				model.position.z = posZ;
-
-				mesh = model;
+				
+				return model;
 			});
+
+			mesh = model;
 
 			document.body.appendChild(ARButton.createButton(renderer));
 
