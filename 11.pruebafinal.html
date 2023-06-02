@@ -59,7 +59,7 @@
                 mesh = model;
 
                 // Código para generar una esfera
-                const sphereGeometry = new THREE.SphereGeometry(0.1, 32, 32);
+                const sphereGeometry = new THREE.SphereGeometry(0.3, 32, 32);
                 const sphereMaterial = new THREE.MeshBasicMaterial({ 
                     color: new THREE.Color("rgb(226,35,213)"),
 					shininess: 6,
@@ -102,10 +102,11 @@
             const mouseY = event.clientY - boundingRect.top;
 
             const intersected = checkIntersection(mouseX, mouseY);
-            if (intersected && intersected.object === model) {
+            if (intersected && intersected.object === sphere) {
                 // Oculta la esfera
-                scene.remove(model);
-
+                scene.remove(sphere);
+                if(isMeshVisible){
+                    isMeshVisible = false;
                 // Redirecciona a uno de los enlaces aleatoriamente
                 const links = [
                     'https://www.youtube.com/',
@@ -115,6 +116,7 @@
                 const randomIndex = Math.floor(Math.random() * links.length);
                 window.location.href = links[randomIndex];
             
+                }
             }
         }
 
