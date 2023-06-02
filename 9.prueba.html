@@ -61,11 +61,11 @@
 
 				const geometry = new THREE.IcosahedronGeometry(0.1, 1);
 				const material = new THREE.MeshPhongMaterial({
-				color: new THREE.Color("rgb(226,35,213)"),
-				shininess: 6,
-				flatShading: true,
-				transparent: 1,
-				opacity: 0.00001
+					color: new THREE.Color("rgb(226,35,213)"),
+					shininess: 6,
+					flatShading: true,
+					transparent: 1,
+					opacity: 0.8
 				});
 				const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
 				sphere.position.copy(model.position); // Copia la posición del modelo
