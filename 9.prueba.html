@@ -75,8 +75,8 @@
 		function animate() {
 			renderer.setAnimationLoop(render);
 
-			if (mesh2) {
-				mesh2.rotation.y += 0.01;
+			if (mesh1) {
+				mesh1.rotation.y += 0.01;
 			}
 		}
 
@@ -93,10 +93,10 @@
 			const mouseY = event.clientY - boundingRect.top;
 
 			const intersected = checkIntersection(mouseX, mouseY);
-			if (intersected && intersected.object === mesh2) {
+			if (intersected && intersected.object === mesh1) {
 				// Cambia la visibilidad de la figura solo si estaba visible
 				if (isMeshVisible) {
-					mesh2.visible = false;
+					mesh1.visible = false;
 					isMeshVisible = false;
 					// Redirecciona a uno de los enlaces aleatoriamente
 					const links = [
