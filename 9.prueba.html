@@ -70,49 +70,6 @@
 				const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
 				sphere.position.copy(model.position); // Copia la posición del modelo
 				scene.add(sphere);
-
-				function onClick(event) {
-					event.preventDefault();
-
-					// Comprueba si el clic se hizo en la figura
-					const boundingRect = renderer.domElement.getBoundingClientRect();
-					const mouseX = event.clientX - boundingRect.left;
-					const mouseY = event.clientY - boundingRect.top;
-
-					const intersected = checkIntersection(mouseX, mouseY);
-					if (intersected && intersected.object === mesh) {
-						// Cambia la visibilidad de la figura solo si estaba visible
-						if (isMeshVisible) {
-							mesh.visible = false;
-							isMeshVisible = false;
-							// Redirecciona a uno de los enlaces aleatoriamente
-							const links = [
-								'https://www.youtube.com/',
-								'https://www.amazon.com.mx/',
-								'https://www.twitch.tv/'
-							];
-							const randomIndex = Math.floor(Math.random() * links.length);
-							window.location.href = links[randomIndex];
-						}
-					}
-				}
-
-				function checkIntersection(x, y) {
-					const mouse = new THREE.Vector2();
-					mouse.x = (x / window.innerWidth) * 2 - 1;
-					mouse.y = -(y / window.innerHeight) * 2 + 1;
-
-					const raycaster = new THREE.Raycaster();
-					raycaster.setFromCamera(mouse, camera);
-
-					const intersects = raycaster.intersectObjects(scene.children, true);
-
-					if (intersects.length > 0) {
-						return intersects[0];
-					}
-
-					return null;
-				}
 			});
 
 
@@ -137,6 +94,48 @@
 			renderer.render(scene, camera);
 		}
 
+		function onClick(event) {
+			event.preventDefault();
+
+			// Comprueba si el clic se hizo en la figura
+			const boundingRect = renderer.domElement.getBoundingClientRect();
+			const mouseX = event.clientX - boundingRect.left;
+			const mouseY = event.clientY - boundingRect.top;
+
+			const intersected = checkIntersection(mouseX, mouseY);
+			if (intersected && intersected.object === mesh) {
+				// Cambia la visibilidad de la figura solo si estaba visible
+				if (isMeshVisible) {
+					mesh.visible = false;
+					isMeshVisible = false;
+					// Redirecciona a uno de los enlaces aleatoriamente
+					const links = [
+						'https://www.youtube.com/',
+						'https://www.amazon.com.mx/',
+						'https://www.twitch.tv/'
+					];
+					const randomIndex = Math.floor(Math.random() * links.length);
+					window.location.href = links[randomIndex];
+				}
+			}
+		}
+
+		function checkIntersection(x, y) {
+			const mouse = new THREE.Vector2();
+			mouse.x = (x / window.innerWidth) * 2 - 1;
+			mouse.y = -(y / window.innerHeight) * 2 + 1;
+
+			const raycaster = new THREE.Raycaster();
+			raycaster.setFromCamera(mouse, camera);
+
+			const intersects = raycaster.intersectObjects(scene.children, true);
+
+			if (intersects.length > 0) {
+				return intersects[0];
+			}
+
+			return null;
+		}
 
 		/*
 		function placeModelRandomly(model) {

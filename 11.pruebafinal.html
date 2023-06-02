@@ -42,33 +42,28 @@
 
             const loader = new THREE.GLTFLoader();
 
-            loader.load('./aMigus/mauricio.glb', function (gltf) {
+            loader.load('./aMigus/mauricio.glb', function(gltf) {
                 const model = gltf.scene;
+                const range = 3;
                 model.scale.set(0.1, 0.1, 0.1);
                 model.rotation.set(0, Math.PI / 2, 0);
                 scene.add(model);
+                posX = Math.random() * range - range / 2;
+                model.position.x = posX;
+                posY = Math.random() * range - range / 2;
+                model.position.y = posY;
+                posZ = Math.random() * range - range / 2;
+                model.position.z = posZ;
 
-                // Set the same position for both meshes
-                const positionX = getRandomPosition();
-                const positionY = getRandomPosition();
-                const positionZ = getRandomPosition();
-                model.position.set(positionX, positionY, positionZ);
+                mesh = model;
 
-                mesh1 = model;
+                // Código para generar una esfera
+                const sphereGeometry = new THREE.SphereGeometry(0.1, 32, 32);
+                const sphereMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+                const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+                sphere.position.copy(model.position); // Copia la posición del modelo
+                scene.add(sphere);
             });
-
-            const geometry = new THREE.IcosahedronGeometry(0.1, 1);
-            const material = new THREE.MeshPhongMaterial({
-                color: new THREE.Color("rgb(226,35,213)"),
-                shininess: 6,
-                flatShading: true,
-                transparent: 1,
-                opacity: 0.00001
-            });
-
-            mesh2 = new THREE.Mesh(geometry, material);
-            mesh2.position.set(getRandomPosition(), getRandomPosition(), -0.5);
-            scene.add(mesh2);
 
             document.body.appendChild(ARButton.createButton(renderer));
 
