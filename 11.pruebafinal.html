@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <link type="text/css" rel="stylesheet" href="style.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r126/three.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r132/three.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/three/examples/js/loaders/GLTFLoader.js"></script>
 </head>
 
@@ -57,19 +57,6 @@
                 model.position.z = posZ;
 
                 mesh = model;
-
-                // Código para generar una esfera
-                const sphereGeometry = new THREE.SphereGeometry(0.3, 32, 32);
-                const sphereMaterial = new THREE.MeshStandardMaterial({ 
-                    color: new THREE.Color("rgb(226,35,213)"),
-                    roughness: 1,
-                    metalness: 0,
-                    transparent: true,
-                    opacityMap: 0.1, 
-                });
-                sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
-                sphere.position.copy(model.position); // Copia la posición del modelo
-                scene.add(sphere);
             });
 
             document.body.appendChild(ARButton.createButton(renderer));
@@ -84,14 +71,19 @@
 
             renderer.setSize(window.innerWidth, window.innerHeight);
         }
-
         function animate() {
             renderer.setAnimationLoop(render);
         }
 
         function render() {
+            // Actualizar la posición de la esfera para que coincida con Mauricio
+            if (mesh && sphere) {
+                sphere.position.copy(mesh.position);
+            }
+
             renderer.render(scene, camera);
         }
+
 
         function onClick(event) {
             event.preventDefault();
@@ -103,19 +95,16 @@
 
             const intersected = checkIntersection(mouseX, mouseY);
             if (intersected && intersected.object === sphere) {
-                // Oculta la esfera
-                scene.remove(sphere);
-                if(isMeshVisible){
+                if (isMeshVisible) {
                     isMeshVisible = false;
-                // Redirecciona a uno de los enlaces aleatoriamente
-                const links = [
-                    'https://www.youtube.com/',
-                    'https://www.amazon.com.mx/',
-                    'https://www.twitch.tv/'
-                ];
-                const randomIndex = Math.floor(Math.random() * links.length);
-                window.location.href = links[randomIndex];
-            
+                    // Redirecciona a uno de los enlaces aleatoriamente
+                    const links = [
+                        'https://www.youtube.com/',
+                        'https://www.amazon.com.mx/',
+                        'https://www.twitch.tv/'
+                    ];
+                    const randomIndex = Math.floor(Math.random() * links.length);
+                    window.location.href = links[randomIndex];
                 }
             }
         }
@@ -138,7 +127,21 @@
             return null;
         }
 
+        // Código para generar una esfera invisible
+        const sphereGeometry = new THREE.SphereGeometry(0.3, 32, 32);
+        const sphereMaterial = new THREE.MeshStandardMaterial({
+            color: new THREE.Color("rgb(226,35,213)"),
+            roughness: 1,
+            metalness: 0,
+            transparent: true,
+            opacity: 0
+        });
+        sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+        sphere.visible = false; // Hace que la esfera sea invisible inicialmente
+        scene.add(sphere);
+
     </script>
 </body>
 
 </html>
+
