@@ -44,16 +44,17 @@
 
 			loader.load('./aMigus/mauricio.glb', function(gltf) {
 				const model = gltf.scene;
+				const range = 3;
 				model.scale.set(0.1, 0.1, 0.1);
 				model.rotation.set(0, Math.PI / 2, 0);
 				//placeModelRandomly(model); 
 				// Coloca el modelo en una posición aleatoria
 				scene.add(model);
-				posX = Math.random() * 3 - 3 / 2;
+				posX = Math.random() * range - range / 2;
 				model.position.x = posX;
-				posY = Math.random() * 3 - 3 / 2;
+				posY = Math.random() * range - range / 2;
 				model.position.y = posY;
-				posZ = Math.random() * 3 - 3 / 2;
+				posZ = Math.random() * range - range / 2;
 				model.position.z = posZ;
 
 				mesh = model;
@@ -134,7 +135,7 @@
 			model.position.y = Math.random() * range - range / 2;
 			model.position.z = Math.random() * range - range / 2;
 		}
-
+		*/
 
 	</script>
 </body>
