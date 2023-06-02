@@ -2,22 +2,22 @@
 <html lang="en">
 
 <head>
-	<title>Random Position in WebXR</title>
+	<title>Experiencia Mauricio</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 	<link type="text/css" rel="stylesheet" href="style.css">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r126/three.js" crossorigin="anonymous"></script>
-	<script src="https://cdn.jsdelivr.net/npm/three/examples/js/loaders/GLTFLoader.js"></script>
 </head>
 
 <body>
 	<script type="module">
-		import { ARButton } from './ARButton.js';
+		// To start an AR scene with webXR, we can use a handy button provided by three.js
+		// We first have to import it because it is a javascript module
+		import { ARButton } from 'https://unpkg.com/three@0.126.0/examples/jsm/webxr/ARButton.js';
 
 		let camera, scene, renderer;
-		let mesh, mesh1;
+		let mesh;
 		let isMeshVisible = true;
-		let posX, posY, posZ;
 
 		init();
 		animate();
@@ -33,43 +33,28 @@
 			renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 			renderer.setPixelRatio(window.devicePixelRatio);
 			renderer.setSize(window.innerWidth, window.innerHeight);
-			renderer.xr.enabled = true;
+			// This next line is important to enable the renderer for WebXR
+			renderer.xr.enabled = true; // New!
 			container.appendChild(renderer.domElement);
 
 			var light = new THREE.HemisphereLight(0xffffff, 0xbbbbff, 1);
 			light.position.set(0.5, 1, 0.25);
 			scene.add(light);
 
-			const loader = new THREE.GLTFLoader();
-
-			loader.load('./aMigus/mauricio.glb', function(gltf) {
-				const model = gltf.scene;
-				const range = 3;
-				model.scale.set(0.1, 0.1, 0.1);
-				model.rotation.set(0, Math.PI / 2, 0);
-				//placeModelRandomly(model); 
-				// Coloca el modelo en una posición aleatoria
-				scene.add(model);
-				posX = Math.random() * range - range / 2;
-				model.position.x = posX;
-				posY = Math.random() * range - range / 2;
-				model.position.y = posY;
-				posZ = Math.random() * range - range / 2;
-				model.position.z = posZ;
-				
-				mesh = model;
-
-				const geometry = new THREE.IcosahedronGeometry(0.1, 1);
-				const material = new THREE.MeshPhongMaterial({
+			const geometry = new THREE.IcosahedronGeometry(0.1, 1);
+			const material = new THREE.MeshPhongMaterial({
 				color: new THREE.Color("rgb(226,35,213)"),
 				shininess: 6,
 				flatShading: true,
 				transparent: 1,
 				opacity: 0.00001
-				});
 			});
 
+			mesh = new THREE.Mesh(geometry, material);
+			mesh.position.set(getRandomPosition(), getRandomPosition(), -0.5);
+			scene.add(mesh);
 
+			// Add the AR button to the body of the DOM
 			document.body.appendChild(ARButton.createButton(renderer));
 
 			window.addEventListener('resize', onWindowResize, false);
@@ -134,14 +119,10 @@
 			return null;
 		}
 
-		/*
-		function placeModelRandomly(model) {
-			const range = 3; // Rango de posición en el que se generará aleatoriamente el modelo
-			model.position.x = Math.random() * range - range / 2;
-			model.position.y = Math.random() * range - range / 2;
-			model.position.z = Math.random() * range - range / 2;
+		function getRandomPosition() {
+			// Genera una posición aleatoria entre -2 y 2
+			return Math.random() * 4 - 2;
 		}
-		*/
 
 	</script>
 </body>
