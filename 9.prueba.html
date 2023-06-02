@@ -73,6 +73,10 @@
 			renderer.setSize(window.innerWidth, window.innerHeight);
 		}
 
+		function animate() {
+			renderer.setAnimationLoop(render);
+		}
+
 		function render() {
 			renderer.render(scene, camera);
 		}
