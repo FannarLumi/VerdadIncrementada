@@ -92,10 +92,10 @@
 			const mouseY = event.clientY - boundingRect.top;
 
 			const intersected = checkIntersection(mouseX, mouseY);
-			if (intersected && intersected.object === mesh1) {
+			if (intersected && intersected.object === mesh) {
 				// Cambia la visibilidad de la figura solo si estaba visible
 				if (isMeshVisible) {
-					mesh1.visible = false;
+					mesh.visible = false;
 					isMeshVisible = false;
 					// Redirecciona a uno de los enlaces aleatoriamente
 					const links = [
