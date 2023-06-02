@@ -80,7 +80,7 @@ class ARButton {
 			button.style.left = 'calc(50% - 50px)';
 			button.style.width = '100px';
 
-			button.textContent = 'ya jala';
+			button.textContent = 'que pedo';
 
 			button.onmouseenter = function () {
 
