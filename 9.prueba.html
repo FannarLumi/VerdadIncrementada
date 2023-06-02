@@ -67,6 +67,9 @@
 				transparent: 1,
 				opacity: 0.00001
 				});
+				const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+				sphere.position.copy(model.position); // Copia la posición del modelo
+				scene.add(sphere);
 			});
 
 
