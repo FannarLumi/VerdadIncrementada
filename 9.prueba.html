@@ -15,7 +15,7 @@
 		import { ARButton } from 'https://unpkg.com/three@0.126.0/examples/jsm/webxr/ARButton.js';
 
 		let camera, scene, renderer;
-		let mesh;
+		let mesh, mesh1;
 		let isMeshVisible = true;
 		let posX, posY, posZ;
 
@@ -90,10 +90,10 @@
 			const mouseY = event.clientY - boundingRect.top;
 
 			const intersected = checkIntersection(mouseX, mouseY);
-			if (intersected && intersected.object === mesh) {
+			if (intersected && intersected.object === mesh1) {
 				// Cambia la visibilidad de la figura solo si estaba visible
 				if (isMeshVisible) {
-					mesh.visible = false;
+					mesh1.visible = false;
 					isMeshVisible = false;
 					// Redirecciona a uno de los enlaces aleatoriamente
 					const links = [
