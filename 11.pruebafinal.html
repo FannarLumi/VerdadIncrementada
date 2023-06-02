@@ -96,9 +96,9 @@
             const mouseY = event.clientY - boundingRect.top;
 
             const intersected = checkIntersection(mouseX, mouseY);
-            if (intersected && intersected.object === sphere) {
+            if (intersected && intersected.object === model) {
                 // Oculta la esfera
-                scene.remove(sphere);
+                scene.remove(model);
 
                 // Redirecciona a uno de los enlaces aleatoriamente
                 const links = [
